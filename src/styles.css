@@ -1,0 +1,40 @@
+body {
+    font-family: sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .gallery img {
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  }
+  
+  .detail img {
+    max-width: 90%;
+    border-radius: 10px;
+  }
+  
+  /* Optional custom animation for shared elements */
+  ::view-transition-old(img),
+  ::view-transition-new(img) {
+    animation-duration: 0.5s;
+  }
+  
