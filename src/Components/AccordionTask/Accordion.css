@@ -1,0 +1,56 @@
+/* Accordion container */
+.accordion-container > div {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Accordion header */
+.accordion-container > div > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+}
+
+/* Accordion icon */
+.accordion-icon {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    transform: rotate(45deg);
+    /* default down arrow */
+    transition: transform 0.3s ease;
+    margin-left: 8px;
+}
+
+/* Rotated state (chevron up) */
+.accordion-icon--rotated {
+    transform: rotate(-135deg);
+}
+
+/* Accordion description with smooth expand/collapse */
+.accordion-description {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-top: 4px;
+    padding-left: 2px;
+}
+
+/* When open */
+.accordion-description.open {
+    max-height: 200px;
+    /* adjust based on expected content size */
+    opacity: 1;
+}

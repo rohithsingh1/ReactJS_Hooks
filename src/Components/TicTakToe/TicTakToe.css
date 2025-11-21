@@ -1,0 +1,29 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 0fr);
+}
+
+.width50Percen {
+    width: 50%;
+}
+
+.flex {
+    display: flex;
+}
+
+.boxSize {
+    width: 120px;
+    height: 120px;
+    border: 1px solid;
+}
+
+.placeCenter {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.mLeft-24 {
+    margin-left: 24px;
+}

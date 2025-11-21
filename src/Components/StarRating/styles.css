@@ -1,0 +1,26 @@
+body {
+    font-family: sans-serif;
+}
+
+.star-icon {
+    --icon-size: 32px;
+    fill: white;
+
+    cursor: pointer;
+    height: var(--icon-size);
+    width: var(--icon-size);
+}
+
+.flex {
+    display: flex;
+}
+
+.star-icon-filled {
+    fill: gold;
+    stroke: #ffa500;
+}
+
+.star-icon-hovered {
+    fill: lightgoldenrodyellow;
+    stroke: #ffd700;
+}

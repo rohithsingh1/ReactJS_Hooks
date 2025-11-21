@@ -1,0 +1,24 @@
+.flex {
+    display: flex;
+}
+
+.flexColumn {
+    flex-direction: column;
+}
+
+table {
+    border: 2px solid rgb(140 140 140);
+}
+
+td {
+    padding: 4px;
+    border: 1px solid rgb(160 160 160);
+}
+
+.flexCenter {
+    justify-content: center;
+}
+
+.marginTop16 {
+    margin-top: 16px;
+}

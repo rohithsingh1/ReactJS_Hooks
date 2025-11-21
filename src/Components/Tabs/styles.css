@@ -1,0 +1,16 @@
+.tabsContainer {
+    display: flex;
+    gap: 12px;
+}
+
+.tab {
+    padding: 7px;
+    border: 1px solid;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.selectedTab {
+    background-color: purple;
+    color: white;
+}

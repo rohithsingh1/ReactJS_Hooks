@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: sans-serif;
     background: #f4f4f4;
     margin: 0;
@@ -32,9 +32,10 @@ body {
     border-radius: 10px;
   }
   
-  /* Optional custom animation for shared elements */
-  ::view-transition-old(img),
-  ::view-transition-new(img) {
-    animation-duration: 0.5s;
-  }
-  
+  /* Optional custom animation for shared elements
+::view-transition-old(img),
+::view-transition-new(img) {
+  animation-duration: 0.5s;
+}
+
+*/
