@@ -28,7 +28,7 @@ import ParentHOC from './Components/HigherOrderComponents/ParentHOC';
 import DisplayGridStyles from './Components/DisplayGridStyles/DisplayGridStyles';
 import InfiniteScroll from './Components/InfiniteScroll/InfiniteScroll';
 import TicTakToe from './Components/TicTakToe/TicTakToe';
-
+import AutoSearchComplete from './Components/AutoSearchComplete/AutoSearchComplete';
 
 function App() {
   const navigate=useNavigate();
@@ -79,7 +79,8 @@ function App() {
         {/* <ParentHOC /> */}
         {/* <DisplayGridStyles /> */}
         {/* <InfiniteScroll /> */}
-        <TicTakToe />
+        {/* <TicTakToe /> */}
+        <AutoSearchComplete />
       </ThemeProvider>
     </>
   )

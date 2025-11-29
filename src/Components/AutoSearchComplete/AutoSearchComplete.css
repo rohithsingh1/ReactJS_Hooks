@@ -1,0 +1,35 @@
+.chipContainer {
+    border: 1px solid;
+    padding: 8px;
+    border-radius: 8px;
+    width: fit-content;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.mLeft-16 {
+    margin-left: 16px;
+}
+
+.mTop-12 {
+    margin-top: 12px;
+}
+
+.flex {
+    display: flex;
+}
+
+.gap-12 {
+    gap: 12px;
+}
+
+.inputContainer {
+    width: 400px;
+    height: 20px;
+}
+
+.iconContainer {
+    width: 12px;
+    height: 12px;
+}
