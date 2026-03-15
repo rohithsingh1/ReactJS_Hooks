@@ -54,3 +54,12 @@
     /* adjust based on expected content size */
     opacity: 1;
 }
+
+.flex {
+    display: flex;
+}
+
+.accordionButtonOverride {
+    border-style: none;
+    background-color: #fff;
+}

@@ -1,0 +1,23 @@
+.progressBarOuterContainer {
+    background-color: grey;
+    height: 12px;
+    width: 80%;
+    border-radius: 12px;
+}
+
+.progressBarInnerContainer {
+    height: inherit;
+    border-radius: 12px;
+    animation: widthChange 2s linear 0s forwards;
+    background-color: aqua;
+}
+
+@keyframes widthChange {
+    0% {
+        width: 0px;
+    }
+
+    100% {
+        width: 100%;
+    }
+}

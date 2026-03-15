@@ -1,91 +1,112 @@
-import React, {useState} from 'react'
-import './TicTakToe.css'
+import React, {useMemo, useState} from "react";
+import "./TicTakToe.css";
+
+const createBoard=(size) =>
+    Array.from({length: size*size}, (_, index) => ({
+        index,
+        value: null
+    }));
+
+const getWinningCases=(size) => {
+    const winningCases=[];
+
+    for (let row=0;row<size;row++) {
+        winningCases.push(
+            Array.from({length: size}, (_, col) => row*size+col)
+        );
+    }
+
+    for (let col=0;col<size;col++) {
+        winningCases.push(
+            Array.from({length: size}, (_, row) => row*size+col)
+        );
+    }
+
+    winningCases.push(Array.from({length: size}, (_, i) => i*size+i));
+    winningCases.push(Array.from({length: size}, (_, i) => i*size+(size-1-i)));
+
+    return winningCases;
+};
 
 function TicTakToe() {
-    const setTicTakToeArrayHandler=() => {
-        return new Array(9).fill(null)
-    }
-    const [ticTakToeArray, setTicTakToeArray]=useState(setTicTakToeArrayHandler())
-    const [userTurn, setUserTurn]=useState(false)
-    const [isGameFinish, setIsGameFinish]=useState(false)
-    const [gameWinner, setGameWinner]=useState(null)
+    const noOfBoxes=3;
+    const winningCases=useMemo(() => getWinningCases(noOfBoxes), [noOfBoxes]);
+    const [boxes, setBoxes]=useState(() => createBoard(noOfBoxes));
+    const [currentUser, setCurrentUser]=useState("X");
+    const [isWinner, setIsWinner]=useState({
+        stop: false,
+        winner: null
+    });
+    const [countNoOfBoxesClicked, setNoOfBoxesClicked]=useState(0);
 
-    const checkUserWinner=(A) => {
-        const winningScenarios=[
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ]
+    const boxClickHandler=(box) => {
+        if (box.value||isWinner.stop) return;
 
-        winningScenarios.map((winningUser) => {
-            const [indx1, indx2, indx3]=winningUser
+        const nextClickedCount=countNoOfBoxesClicked+1;
+        setNoOfBoxesClicked(nextClickedCount);
 
-            if (A[indx1]!==null&&A[indx1]===A[indx2]&&A[indx1]===A[indx3]) {
-                setIsGameFinish(true)
-                setGameWinner(`Game Winner is ${A[indx1]}`)
-                return
-            }
-        })
+        const tempBoxes=[...boxes];
+        tempBoxes[box.index]={
+            ...tempBoxes[box.index],
+            value: currentUser
+        };
+        setBoxes(tempBoxes);
 
-    }
+        const hasWinner=winningCases.some((winningCase) =>
+            winningCase.every((index) => tempBoxes[index].value===currentUser)
+        );
 
-    const checkGameDraw=(A) => {
-        if (!A.includes(null)) {
-            setIsGameFinish(true)
-            setGameWinner(`The Game is draw`)
+        if (hasWinner) {
+            setIsWinner({
+                stop: true,
+                winner: currentUser
+            });
+            return;
         }
-    }
 
-    const boxClickHandler=(index) => {
-        const value=ticTakToeArray[index]
-        if (!value) {
-            const cloneArray=[...ticTakToeArray]
-            cloneArray[index]=userTurn? 'X':'O'
-            setTicTakToeArray(cloneArray)
-            setUserTurn(!userTurn)
-            checkGameDraw(cloneArray)
-            checkUserWinner(cloneArray)
+        if (nextClickedCount===noOfBoxes*noOfBoxes) {
+            setIsWinner({
+                stop: true,
+                winner: null
+            });
+            return;
         }
-    }
+
+        setCurrentUser(currentUser==="X"? "O":"X");
+    };
 
     const resetGameHandler=() => {
-        setUserTurn(false)
-        setIsGameFinish(false)
-        setGameWinner(null)
-        setTicTakToeArray(setTicTakToeArrayHandler())
-    }
+        setBoxes(createBoard(noOfBoxes));
+        setIsWinner({stop: false, winner: null});
+        setNoOfBoxesClicked(0);
+        setCurrentUser("X");
+    };
+
     return (
         <div>
-            <h2>TicTakToe</h2>
-            <div>
-                {isGameFinish&&<div className='flex'>
-                    <div>{gameWinner}</div>
-                    <button className='mLeft-24' onClick={resetGameHandler}>Reset Game</button>
-                </div>}
-            </div>
-            <div> user Turn now {userTurn? 'X':'O'} </div>
-            <div className='width50Percen'>
-                <div className='gridContainer'>
-                    {
-                        ticTakToeArray.map((ele, index) => {
-                            return (
-                                <div key={index} >
-                                    <div onClick={() => !isGameFinish? boxClickHandler(index):null} className='boxSize placeCenter'>
-                                        <div>{ele}</div>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
+            <h2>TicTakToe Game</h2>
+            {isWinner.stop? (
+                <div>
+                    <button onClick={resetGameHandler}>Restart Game</button>
+                    {isWinner.winner? <div>Winner is {isWinner.winner}</div>:<div>Game Draw</div>}
                 </div>
+            ):(
+                <h2>CurrentUser:- {currentUser}</h2>
+            )}
+            <div
+                className="gridContainer"
+                style={{gridTemplateColumns: `repeat(${noOfBoxes}, 120px)`}}
+            >
+                {boxes.map((box) => {
+                    return (
+                        <div onClick={() => boxClickHandler(box)} className="boxContainer" key={box.index}>
+                            <span>{box.value}</span>
+                        </div>
+                    );
+                })}
             </div>
         </div>
-    )
+    );
 }
 
-export default TicTakToe
+export default TicTakToe;

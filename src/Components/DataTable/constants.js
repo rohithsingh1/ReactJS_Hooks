@@ -217,4 +217,20 @@ export const users=[
     }
 ]
 
-export default users;
+export const selectUsersPerPageData=[
+    {
+        value: 5,
+        displayText: 'show 5',
+        selected: true
+    },
+    {
+        value: 10,
+        displayText: 'show 10',
+        selected: false
+    },
+    {
+        value: 20,
+        displayText: 'show 20',
+        selected: false
+    }
+]

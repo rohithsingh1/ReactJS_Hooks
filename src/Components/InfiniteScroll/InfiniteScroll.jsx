@@ -1,79 +1,96 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useRef, useState} from "react";
+
 const baseUrl="https://jsonplaceholder.typicode.com/posts";
 const LIMIT=20;
-import useDebounce from './hooks/useDebounce';
 
 function InfiniteScroll() {
-    const [apiData, setApiData]=useState([])
-    const [isFetched, setIsFetched]=useState(false)
-    const [pageNo, setPageNo]=useState(1)
-    const [errorMsg, setErrorMsg]=useState(null)
+    const [apiData, setApiData]=useState([]);
+    const [isFetched, setIsFetched]=useState(false);
+    const [pageNo, setPageNo]=useState(1);
+    const [errorMsg, setErrorMsg]=useState(null);
     const [hasMoreData, setHasMoreData]=useState(true);
+    const [isLoading, setIsLoading]=useState(false);
+    const loaderRef=useRef(null);
 
     useEffect(() => {
-        try {
-            async function fetchPostsData() {
-                const apiResponse=await fetch(`${baseUrl}?_page=${pageNo}&_limit=${LIMIT}`)
-                const apiResponseData=await apiResponse.json()
-                console.log("apiResponseData>>>>>>>>", apiResponseData);
+        const controller=new AbortController();
+
+        async function fetchPostsData() {
+            try {
+                setIsLoading(true);
+                const apiResponse=await fetch(`${baseUrl}?_page=${pageNo}&_limit=${LIMIT}`, {
+                    signal: controller.signal
+                });
+                if (!apiResponse.ok) {
+                    throw new Error("Failed to fetch posts");
+                }
+                const apiResponseData=await apiResponse.json();
+
                 if (Array.isArray(apiResponseData)) {
-                    if (apiResponseData.length===0) {
+                    if (apiResponseData.length<LIMIT) {
                         setHasMoreData(false);
                     }
-                    setIsFetched(true)
-                    setErrorMsg(null)
+                    setIsFetched(true);
+                    setErrorMsg(null);
                     setApiData((prev) => {
                         if (pageNo===1) {
-                            return [...apiResponseData]
+                            return [...apiResponseData];
                         } else {
-                            return [...prev, ...apiResponseData]
+                            return [...prev, ...apiResponseData];
                         }
-                    })
+                    });
                 }
             }
-
-            fetchPostsData()
-        } catch (error) {
-            console.log("error>>>>>>", error);
-            setIsFetched(false)
-            setErrorMsg('some thing went wrong')
+            catch (error) {
+                if (error.name!=="AbortError") {
+                    setIsFetched(false);
+                    setErrorMsg("Something went wrong");
+                }
+            } finally {
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                }
+            }
         }
-    }, [pageNo])
+
+        fetchPostsData();
+
+        return () => controller.abort();
+    }, [pageNo]);
 
     useEffect(() => {
-        const onScroll=() => {
-            if (
-                document.body.scrollHeight-500<
-                window.scrollY+window.innerHeight&&
-                hasMoreData
-            ) {
-                console.log("condition is true>>>>>>");
-                setPageNo((p) => p+1);
-            }
-        };
-        const debouncedFn=useDebounce(onScroll, 800);
-        window.addEventListener("scroll", debouncedFn);
-        return () => window.removeEventListener("scroll", debouncedFn);
-    }, [hasMoreData]);
+        const observer=new IntersectionObserver(
+            (entries) => {
+                const firstEntry=entries[0];
+                if (firstEntry.isIntersecting&&hasMoreData&&!isLoading) {
+                    setPageNo((prev) => prev+1);
+                }
+            },
+            {root: null, rootMargin: "250px", threshold: 0.1}
+        );
 
-    console.log("apiData>>>>>>>>", apiData);
+        if (loaderRef.current) observer.observe(loaderRef.current);
+
+        return () => observer.disconnect();
+    }, [hasMoreData, isLoading]);
 
     if (isFetched) {
         return (
             <div>
                 <h1>Your Feed</h1>
                 <ol>
-                    {apiData.map((post, index) => {
+                    {apiData.map((post) => {
                         return (
-                            <li
-                                key={post.id}
-                            >
+                            <li key={post.id}>
                                 <h2>{post.title}</h2>
                                 <p>{post.body}</p>
                             </li>
                         );
                     })}
                 </ol>
+                {isLoading&&<p>Loading more...</p>}
+                {!hasMoreData&&<p>No more posts</p>}
+                <div ref={loaderRef} style={{height: "1px"}} />
             </div>
         );
     } else if (errorMsg) {

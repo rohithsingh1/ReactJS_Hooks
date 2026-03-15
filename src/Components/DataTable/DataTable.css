@@ -1,3 +1,21 @@
+.container {
+    width: 60%;
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+}
+
+.verticalSeperator {
+    border: 1px solid rgba(0, 0, 0, 0.747);
+}
+
 .flex {
     display: flex;
+}
+
+.justifyBetween {
+    justify-content: space-between;
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import './styles.css'
 
 const tabsData={
@@ -6,61 +6,95 @@ const tabsData={
         {
             id: 1,
             title: 'HTML',
-            defaultSelected: true
-        },
-        {
-            id: 2,
-            title: 'CSS',
-            defaultSelected: false
-        },
-        {
-            id: 3,
-            title: 'JavaScript',
-            defaultSelected: false
-        }
-    ],
-    tabContent: {
-        1: {
+            defaultSelected: true,
             text: `The HyperText Markup Language or HTML is the
                     standard markup language for documents designed to
                     be displayed in a web browser.`,
         },
-        2: {
+        {
+            id: 2,
+            title: 'CSS',
+            defaultSelected: false,
             text: `Cascading Style Sheets is a style sheet language
                     used for describing the presentation of a document
                     written in a markup language such as HTML or XML.`,
         },
-        3: {
+        {
+            id: 3,
+            title: 'JavaScript',
+            defaultSelected: false,
             text: `JavaScript, often abbreviated as JS, is a
                     programming language that is one of the core
                     technologies of the World Wide Web, alongside HTML
                     and CSS.`,
         }
-    }
+    ]
 }
 
 function Tabs() {
-    const [tabId, setTabId]=useState(null)
+    const [selectedTab, setSelectedTab]=useState({})
+    const [focusIndex, setFocusIndex]=useState(0)
+    const accordionRefs=useRef([])
 
     useEffect(() => {
-        if (tabsData.tabs?.length>0) {
-            tabsData.tabs.forEach((ele) => {
-                const {id, defaultSelected}=ele||{}
-                if (defaultSelected) {
-                    setTabId(id)
-                }
-            })
+        const selectedTab=tabsData.tabs.find((ele) => {
+            return ele.defaultSelected===true
+        })
+        if (selectedTab) {
+            setSelectedTab(selectedTab)
         }
-    }, [tabsData])
-    return <div>
-        {tabsData.tabs.map((ele) => {
-            const {id, title}=ele||{}
-            return <div key={id}>
-                <button onClick={() => {setTabId(id)}}>{title}</button>
-            </div>
-        })}
-        {tabsData.tabContent?.[tabId]&&<div>{tabsData.tabContent?.[tabId]?.text}</div>}
-    </div>
+    }, [])
+
+    const tabClickHandler=(tab) => {
+        const selectedTab=tabsData.tabs.find((ele) => {
+            return ele.id===tab.id
+        })
+        setSelectedTab(selectedTab)
+    }
+
+    useEffect(() => {
+        if (accordionRefs.current[focusIndex]) {
+            accordionRefs.current[focusIndex].focus()
+        }
+    }, [focusIndex])
+
+    const accessibleByArrows=(e, index) => {
+        const {key}=e
+        console.log("keys>>>>>", key);
+        if (key==='ArrowRight') {
+            e.preventDefault()
+            const nextIndex=index+1
+            if (nextIndex<tabsData.tabs.length) {
+                setFocusIndex(nextIndex)
+            }
+        }
+        else if (key==="ArrowLeft") {
+            e.preventDefault()
+            const prevIndex=index-1
+            if (prevIndex>=0) {
+                setFocusIndex(prevIndex)
+            }
+        }
+    }
+
+    return <React.Fragment>
+        <div className='tabsContainer'>
+            {tabsData.tabs.map((tab, index) => {
+                return <button
+                    tabIndex={focusIndex===index? 0:-1}
+                    ref={(el) => accordionRefs.current[index]=el}
+                    onKeyDown={(e) => accessibleByArrows(e, index)}
+                    onClick={() => {tabClickHandler(tab)}}
+                    key={index}
+                    className={`tab ${selectedTab.id===tab.id? "selectedTab":""} `}>
+                    {tab.title}
+                </button>
+            })}
+        </div>
+        <div className='marginTop12'>
+            {selectedTab?.text}
+        </div>
+    </React.Fragment>
 }
 
 export default Tabs

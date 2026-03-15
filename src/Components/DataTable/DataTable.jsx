@@ -1,89 +1,186 @@
 import React, {useState, useEffect} from 'react'
-import {users} from "./constants"
+import {users, selectUsersPerPageData} from "./constants"
 import "./DataTable.css"
 
 const tableHeader=[
-    {label: 'ID', key: 'id'},
-    {label: 'Name', key: 'name'},
-    {label: 'Age', key: 'age'},
-    {label: 'Occupation', key: 'occupation'},
+    {label: 'ID', key: 'id', sorted: true},
+    {label: 'Name', key: 'name', sorted: false},
+    {label: 'Age', key: 'age', sorted: false},
+    {label: 'Occupation', key: 'occupation', sorted: false},
 ]
 
 function DataTable() {
-    const [rowsPerPage, setRowsPerPage]=useState({
-        limit: 5,
-        offset: 0
-    })
-    const [page, setPage]=useState(1)
-    const totalPages=Math.ceil(users.length/rowsPerPage.limit)
-
-
-    const rowsPerPageHandler=(e) => {
-        setRowsPerPage({
-            limit: Number(e.target.value),
-            offset: 0
-        })
-        setPage(1)
-    }
-
-    const prePageHandler=() => {
-        setPage((prev) => {
-            return prev-1
-        })
-    }
+    const [usersData, setUsersData]=useState(users)
+    const [userTableHeaderData, setUserTableHeaderData]=useState(tableHeader)
+    const [selectedOption, setSelectedOptions]=useState(null)
+    const [paginationDetails, setPaginationDetails]=useState({start: 0, end: 0, pageNumber: 1, totalPages: 1})
+    const [selectedTableHeader, setSelectedTableHeader]=useState(null)
 
     useEffect(() => {
-        setRowsPerPage((prev) => {
-            return {
-                limit: prev.limit,
-                offset: (prev.limit)*(page-1)
-            }
+        const selectedOption=selectUsersPerPageData.find((option) => {
+            return option.selected===true
         })
-    }, [page])
+        const selectedTableHeader=tableHeader.find((theader) => {
+            return theader.sorted===true
+        })
+        if (selectedTableHeader) {
+            setSelectedTableHeader(selectedTableHeader)
+        }
+        if (selectedOption) {
+            const value=Number(selectedOption.value)
+            setSelectedOptions(value)
+            const obj={
+                start: 0,
+                end: value,
+                pageNumber: 1,
+                totalPages: Math.ceil(users.length/value)
+            }
+            setPaginationDetails(obj)
+        }
+    }, [])
 
-    const nextPageHandler=() => {
-        setPage(page+1)
+    useEffect(() => {
+        const slicedUsersList=users.slice(paginationDetails.start, paginationDetails.end)
+        setUsersData(slicedUsersList)
+    }, [paginationDetails])
+
+    useEffect(() => {
+        if (selectedTableHeader) {
+            const obj={
+                start: 0,
+                end: selectedOption,
+                pageNumber: 1,
+                totalPages: Math.ceil(users.length/selectedOption)
+            }
+            setPaginationDetails(obj)
+            if (selectedTableHeader?.sorted) {
+                if (selectedTableHeader.key==='name'||selectedTableHeader.key==='occupation') {
+                    const sortedData=users.sort((a, b) => {
+                        return a[selectedTableHeader.key].localeCompare(b[selectedTableHeader.key])
+                    }).slice(0, selectedOption)
+                    setUsersData(sortedData)
+                } else {
+                    const sortedData=users.sort((a, b) => {
+                        return a[selectedTableHeader.key]-b[selectedTableHeader.key]
+                    }).slice(0, selectedOption)
+                    setUsersData(sortedData)
+                }
+            } else {
+                if (selectedTableHeader.key==='name'||selectedTableHeader.key==='occupation') {
+                    const sortedData=users.sort((a, b) => {
+                        return b[selectedTableHeader.key].localeCompare(a[selectedTableHeader.key])
+                    }).slice(0, selectedOption)
+                    setUsersData(sortedData)
+                } else {
+                    const sortedData=users.sort((a, b) => {
+                        return b[selectedTableHeader.key]-a[selectedTableHeader.key]
+                    }).slice(0, selectedOption)
+
+                    setUsersData(sortedData)
+                }
+            }
+        }
+    }, [selectedTableHeader])
+
+    console.log("usersData>>>>>>>", usersData);
+    console.log("paginationDetails>>>>>>", paginationDetails);
+
+
+
+    const selectUsersPerPageHandler=(e) => {
+        e.preventDefault()
+        const value=Number(e.target.value)
+        setSelectedOptions(value)
+        const obj={
+            start: 0,
+            end: value,
+            pageNumber: 1,
+            totalPages: Math.ceil(users.length/value)
+        }
+        setPaginationDetails(obj)
     }
 
-    return (
-        <div>
-            <h2>Data Table</h2>
-            <table>
-                <thead>
-                    <tr>
-                        {tableHeader.map((ele) => {
-                            const {key, label}=ele||{}
-                            return <th key={key}>{label}</th>
-                        })}
-                    </tr>
-                </thead>
-                <tbody>
-                    {
+    const nextPageClickHandler=(e) => {
+        e.preventDefault()
+        setPaginationDetails((prev) => {
+            return {
+                ...prev,
+                start: prev.end,
+                end: prev.end+selectedOption,
+                pageNumber: prev.pageNumber+1
+            }
+        })
+    }
 
-                        users.slice(rowsPerPage.offset, rowsPerPage.offset+rowsPerPage.limit).map((ele) => {
-                            const {id, name, occupation, age}=ele||{}
-                            return <tr key={id}>
-                                <td>{id}</td>
-                                <td>{name}</td>
-                                <td>{age}</td>
-                                <td>{occupation}</td>
-                            </tr>
-                        })
-                    }
-                </tbody>
-            </table>
-            <div className='flex'>
-                <select onClick={rowsPerPageHandler}>
-                    <option value={5}>show 5</option>
-                    <option value={10}>show 10</option>
-                    <option value={20}>show 20</option>
-                </select>
-                <button onClick={prePageHandler} disabled={page===1}>Prev</button>
-                page {page} of {totalPages}
-                <button onClick={nextPageHandler} disabled={page===totalPages}  >Next</button>
+    const previousPageClickHandler=(e) => {
+        e.preventDefault()
+        setPaginationDetails((prev) => {
+            return {
+                ...prev,
+                start: prev.start-selectedOption,
+                end: prev.start,
+                pageNumber: prev.pageNumber-1
+            }
+        })
+    }
+
+    const tableHeaderClickHandler=(tableHeader) => {
+        const tempTableHeaderData=userTableHeaderData.map((ele) => {
+            if (ele.key===tableHeader.key) {
+                return {
+                    ...ele,
+                    sorted: !ele.sorted
+                }
+            } else {
+                return ele
+            }
+        })
+        setUserTableHeaderData(tempTableHeaderData)
+        setSelectedTableHeader({...tableHeader, sorted: !tableHeader.sorted})
+    }
+
+
+    return <div className='container'>
+        <table>
+            <thead>
+                <tr>
+                    {userTableHeaderData.map((tableHeader) => {
+                        return <th key={tableHeader.key} onClick={() => tableHeaderClickHandler(tableHeader)} >{tableHeader.label}</th>
+                    })}
+                </tr>
+            </thead>
+            <tbody>
+                {usersData.map((user) => {
+                    return <tr key={user.id} >
+                        <td>{user.id}</td>
+                        <td>{user.name}</td>
+                        <td>{user.age}</td>
+                        <td>{user.occupation}</td>
+                    </tr>
+                })}
+            </tbody>
+        </table>
+        <div className='verticalSeperator'></div>
+        <div className='flex justifyBetween'>
+            <select defaultValue={selectedOption} onChange={selectUsersPerPageHandler}>
+                {selectUsersPerPageData.map((selectOption) => {
+                    return <option key={selectOption.value}
+                        value={selectOption.value}
+                    >
+                        {selectOption.displayText}
+                    </option>
+                })}
+            </select>
+            <button onClick={previousPageClickHandler} disabled={paginationDetails.pageNumber===1}>Prev</button>
+            <div>
+                page <span>{paginationDetails.pageNumber}</span> of <span>{paginationDetails.totalPages}</span>
             </div>
+            <button
+                disabled={paginationDetails.pageNumber===paginationDetails.totalPages}
+                onClick={nextPageClickHandler}
+            >Next</button>
         </div>
-    )
+    </div>
 }
 
 export default DataTable

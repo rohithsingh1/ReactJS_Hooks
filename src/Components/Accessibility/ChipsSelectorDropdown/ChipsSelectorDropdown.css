@@ -1,0 +1,104 @@
+.mainContainer {
+    border: 1px solid grey;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mainContainer .inputContainer {
+    height: 50px;
+    width: 200px;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    margin-left: 12px;
+    outline: none;
+}
+
+.mainContainer .inputContainer:focus {
+    outline: none;
+}
+
+.listContainer {
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 350px;
+    overflow-y: auto;
+    background-color: black;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 200px;
+    scroll-behavior: smooth;
+}
+
+.optionItem {
+    padding: 12px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.15s ease;
+}
+
+.optionItem:hover {
+    background-color: #f0f0f0;
+    color: gray;
+}
+
+.optionItem.focused {
+    background-color: #0066cc;
+    color: white;
+}
+
+.selectedChipsContainer {
+    display: flex;
+}
+
+.selectedChipsContainer1 {
+    padding: 4px;
+    border: 1px solid gray;
+    cursor: pointer;
+    display: flex;
+    margin: 8px 4px;
+    gap: 4px;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.chipButton:hover {
+    background-color: #d0d0d0;
+    border-color: #666;
+}
+
+.chipButton:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+    background-color: #d0d0d0;
+}
+
+.chipButton:active {
+    background-color: #c0c0c0;
+}
+
+.crossIcon {
+    height: 14px;
+    width: 14px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.chipButton:hover .crossIcon {
+    opacity: 1;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

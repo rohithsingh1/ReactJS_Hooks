@@ -14,3 +14,12 @@
     background-color: purple;
     color: white;
 }
+
+.marginTop12 {
+    margin-top: 12px;
+}
+
+.tabsButtonOverride {
+    border-style: none;
+    background-color: #fff;
+}

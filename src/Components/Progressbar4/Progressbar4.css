@@ -1,0 +1,40 @@
+.progressBarContainer {
+    width: 80%;
+    height: 15px;
+    background-color: gray;
+    border-radius: 8px;
+    border: 1px solid gray;
+    margin-top: 12px;
+}
+
+.fillUp {
+    width: 0px;
+    height: 0px;
+    background-color: greenyellow;
+    border-radius: 8px;
+    border: 1px solid greenyellow;
+    transition: width 2s linear;
+}
+
+.fillUp.active {
+    width: 100%;
+    height: inherit;
+}
+
+.progressBarTransition {
+    width: 0%;
+    height: inherit;
+    background-color: greenyellow;
+    animation: progressAnimation 2s linear forwards;
+    border-radius: 8px;
+}
+
+@keyframes progressAnimation {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}

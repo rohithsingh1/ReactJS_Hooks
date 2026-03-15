@@ -1,0 +1,72 @@
+.dropdownContainer {
+    position: relative;
+
+}
+
+.labeldivContainer {
+    border: 1px solid gray;
+    width: fit-content;
+    border-radius: 4px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.dropdownArrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.dropdownArrow.open {
+    transform: rotate(180deg);
+}
+
+.listContainer {
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.optionItem {
+    padding: 10px 12px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.15s ease;
+}
+
+.optionItem:hover {
+    background-color: #f0f0f0;
+}
+
+.optionItem.focused {
+    background-color: #0066cc;
+    color: white;
+}
+
+.option {
+    display: block;
+    user-select: none;
+}
+
+.listContainer {
+    margin-top: 8px;
+    margin-left: 8px;
+    border: 1px solid grey;
+    width: fit-content;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: 8px;
+}
+
+.listContainer .option {
+    cursor: pointer;
+}

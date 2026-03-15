@@ -8,11 +8,9 @@ function ProgressBar2() {
         <div>
             <button onClick={() => setAddProgressBar((prev) => prev+1)} >Add</button>
             <div className='container'>
-                {Array.from({length: addProgressBar}, (_, index) => index+1).map((ele) => {
-                    return <div key={ele}>
-                        <div className='progress'>
-                            <div className='progress-color'></div>
-                        </div>
+                {Array.from({length: addProgressBar}, (_, index) => {index+1}).map((ele, index) => {
+                    return <div key={index} className='progress'>
+                        <div className='progress-color'></div>
                     </div>
                 })}
             </div>

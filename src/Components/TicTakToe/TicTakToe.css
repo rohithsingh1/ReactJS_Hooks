@@ -1,29 +1,16 @@
 .gridContainer {
     display: grid;
-    grid-template-columns: repeat(3, 0fr);
+    row-gap: 10px;
+    column-gap: 10px;
+    margin-top: 12px;
 }
 
-.width50Percen {
-    width: 50%;
-}
-
-.flex {
-    display: flex;
-}
-
-.boxSize {
+.boxContainer {
     width: 120px;
     height: 120px;
-    border: 1px solid;
-}
-
-.placeCenter {
+    border: 1px solid black;
+    text-align: center;
     display: flex;
     justify-content: center;
-    align-content: center;
-    flex-wrap: wrap;
-}
-
-.mLeft-24 {
-    margin-left: 24px;
+    align-items: center;
 }
