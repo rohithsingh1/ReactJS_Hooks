@@ -50,7 +50,9 @@ import {Routes, Route, useNavigate} from "react-router-dom";
 // import Task from './Components/Task/BackGroundChangetask';
 // import Timer1 from './Components/Timer/Timer1';
 // import ProgressBar5 from './Components/ProgressBar5/ProgressBar5';
-import ImageCarouselParent from './Components/ImageCarousel/ImageCarousel';
+// import ImageCarouselParent from './Components/ImageCarousel/ImageCarousel';
+// import ToastNotifications from './Components/ToastNotifications/ToastNotifications';
+import ProductListingPageWithFilters from './Components/ProductListingPageWithFilters/ProductListingPageWithFilters';
 
 function App() {
   const navigate=useNavigate();
@@ -60,7 +62,9 @@ function App() {
       {/* <Task /> */}
       {/* <Timer1 /> */}
       {/* <ProgressBar5 /> */}
-      <ImageCarouselParent />
+      {/* <ImageCarouselParent /> */}
+      {/* <ToastNotifications /> */}
+      <ProductListingPageWithFilters />
     </>
   )
 }

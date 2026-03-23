@@ -1,0 +1,21 @@
+.successNotification {
+    background-color: seagreen;
+    border-color: seagreen;
+    border-radius: 8px;
+    padding: 8px;
+    color: white;
+    text-align: center;
+    z-index: 8;
+    position: relative;
+}
+
+.failNotification {
+    background-color: rgb(255, 81, 0);
+    border-color: rgb(255, 81, 0);
+    border-radius: 8px;
+    padding: 8px;
+    color: white;
+    text-align: center;
+    z-index: 8;
+    position: relative;
+}
