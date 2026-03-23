@@ -1,0 +1,23 @@
+src/App.jsx
+  97e0dcd4f4852c62 53-55,65-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "49efe3fc3828ed9328ed20e6325c430e4ce32442",
+  "prompts": {
+    "97e0dcd4f4852c62": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019c9ed3-5e3b-7f01-9d0f-97ff08d8e7bc",
+        "model": "gpt-5.4"
+      },
+      "human_author": "unknown",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 2,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
